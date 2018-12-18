@@ -10,6 +10,11 @@ export default new Router({
       component: require('@/views/Landing').default
     },
     {
+      path: '/:path/:method',
+      name: 'path',
+      component: require('@/views/Path').default
+    },
+    {
       path: '*',
       redirect: '/'
     }

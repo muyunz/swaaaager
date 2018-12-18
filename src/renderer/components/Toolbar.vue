@@ -1,8 +1,7 @@
 <template>
-  <i-menu mode="horizontal" theme="dark" active-name="1">
-    <div class="layout-logo"></div>
+  <div class="toolbar">
     <Input size="large" placeholder="請填入 swagger.json" v-model="swaggerUrl" @keyup.enter.native="parse"/>
-  </i-menu>
+  </div>
 </template>
 
 <script>
@@ -27,5 +26,8 @@ export default {
 </script>
 
 <style lang="scss">
-
+  .toolbar {
+    padding: 20px;
+    background: #393E52;
+  }
 </style>

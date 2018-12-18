@@ -5,9 +5,11 @@ import App from './App'
 import router from './router'
 import store from './store'
 
+import './components'
+
 import iView from 'iview'
 import 'iview/dist/styles/iview.css'
-// import './styles/theme.less'
+import './styles/app.scss'
 
 Vue.use(iView)
 

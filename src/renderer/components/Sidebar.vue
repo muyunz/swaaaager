@@ -1,67 +1,89 @@
 <template>
-  <Sider width="300px" class="b-sidebar">
-    <Menu :theme="theme2">
-      <Submenu name="1">
+  <div hide-trigger class="api-sidebar">
+    <Menu width="300px">
+      <Submenu :name="tag" v-for="(tag, tagIndex) in Object.keys(tags)" :key="tagIndex">
         <template slot="title">
-          内容管理
+          {{ tag }}
         </template>
-        <MenuItem name="1-1">文章管理</MenuItem>
-        <MenuItem name="1-2">评论管理</MenuItem>
-        <MenuItem name="1-3">举报管理</MenuItem>
-      </Submenu>
-      <Submenu name="2">
-        <template slot="title">
-          用户管理
-        </template>
-        <MenuItem name="2-1">新增用户</MenuItem>
-        <MenuItem name="2-2">活跃用户</MenuItem>
-      </Submenu>
-      <Submenu name="3">
-        <template slot="title">
-          统计分析
-        </template>
-        <MenuGroup title="使用">
-          <MenuItem name="3-1">新增和启动</MenuItem>
-          <MenuItem name="3-2">活跃分析</MenuItem>
-          <MenuItem name="3-3">时段分析</MenuItem>
-        </MenuGroup>
-        <MenuGroup title="留存">
-          <MenuItem name="3-4">用户留存</MenuItem>
-          <MenuItem name="3-5">流失用户</MenuItem>
-        </MenuGroup>
+        <MenuItem
+          class="api-menu"
+          v-for="(pathMethod, pathMethodIndex) in tags[tag].paths"
+          :style="{ paddingLeft: '15px' }"
+          :key="pathMethodIndex"
+          :name="`${tag}-${pathMethodIndex}`">
+          <router-link :to="{ name: 'path', params: { path: pathMethod.path, method: pathMethod.method } }" class="api-menu__item">
+            <Tooltip :content="pathMethod.method.toUpperCase()" placement="top">
+              <div class="api-menu__item-dot" :style="{background: method[pathMethod.method].color}"></div>
+            </Tooltip>
+            <div class="api-menu__item-info">
+              <div class="api-menu__item-path">{{ pathMethod.path }}</div>
+              <div class="api-menu__item-summary">{{ paths[pathMethod.path][pathMethod.method].summary }}</div>
+            </div>
+          </router-link>
+        </MenuItem>
       </Submenu>
     </Menu>
-  </Sider>
+  </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
-import ApiPath from "@/components/ApiPath";
+import { mapState } from "vuex"
+import ApiPath from "@/components/ApiPath"
+import config from '@/config'
 export default {
   components: {
     ApiPath
   },
   data() {
     return {
-      show: true
+      show: true,
+      method: config.method
     };
   },
   computed: {
     ...mapState("swagger", {
-      paths: state =>
-        state.root
-          ? Object.keys(state.root.paths).map(path => ({
-              uri: path,
-              info: state.root.paths[path]
-            }))
-          : []
+      tags: state => state.tags,
+      paths: state => state.resource.paths
     })
   }
 };
 </script>
 
 <style lang="scss">
-.ivu-layout-sider.b-sidebar {
+.api-sidebar {
+  min-width: 300px;
+  overflow-y: auto;
   background: #ffffff;
+
+  .ivu-menu-vertical.ivu-menu-light:after {
+    background: none;
+  }
+
+  .api-menu {
+    padding-left: 0px;
+    .api-menu__item {
+      display: flex;
+      align-items: center;
+      .api-menu__item-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #333;
+        margin: 15px;
+      }
+      .api-menu__item-path {
+        color: #333;
+        font-weight: bold;
+      }
+      .api-menu__item-summary {
+        color: #666;
+      }
+    }
+  }
+
+  /* 隱藏右側 Icon */
+  .ivu-menu-submenu-title-icon {
+    display: none;
+  }
 }
 </style>

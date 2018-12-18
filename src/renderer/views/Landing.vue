@@ -1,5 +1,5 @@
 <template>
-  <h1>{{ $store.state.swagger }}</h1>
+  <div>{{ $store.state.swagger }}</div>
 </template>
 
 <script>

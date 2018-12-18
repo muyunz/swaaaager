@@ -1,18 +1,12 @@
 <template>
-  <div class="layout">
-    <Layout>
-      <Header>
-        <toolbar></toolbar>
-      </Header>
-      <Layout>
-        <sidebar></sidebar>
-        <Layout class="content-layout">
-          <Content>
-            <router-view></router-view>
-          </Content>
-        </Layout>
-      </Layout>
-    </Layout>
+  <div class="app">
+    <toolbar></toolbar>
+    <div class="main" v-if="$store.state.swagger.fetched">
+      <sidebar class="main-sidebar"></sidebar>
+      <div class="main-content">
+        <router-view></router-view>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -29,8 +23,25 @@ export default {
 </script>
 
 <style lang="scss">
-  .content-layout {
-    padding: 25px;
+  .app {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    .main {
+      display: flex;
+      .main-sidebar {
+        width: 300px;
+      }
+      .main-content {
+        flex: 1;
+        display: flex;
+        overflow-y: auto;
+        overflow-x: hidden;
+        background: #fffcf9;
+      }
+    }
   }
 </style>
 
