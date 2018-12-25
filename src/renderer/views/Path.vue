@@ -9,24 +9,31 @@
     <h2 class="sub-title">參數</h2>
     <params-panel :params="path.parameters"></params-panel>
     <h2 class="sub-title">回應</h2>
+    <response-panel :responses="path.responses"></response-panel>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import _ from 'lodash'
+
 export default {
+  data () {
+    return {
+
+    }
+  },
   computed: {
     ...mapState('swagger', {
       resource: state => state.resource,
       paths: state => state.resource ? state.resource.paths : []
     }),
     path () {
-      return this.paths[this.$route.params.path]
+      return this.paths[this.$route.params.path][this.$route.params.method]
     },
     pathHtml () {
       const re = /\{([^}]+)\}/g
       return this.$route.params.path.replace(re, function($0, $1, $2) {
-        console.log($0, $1, $2)
         return '<a class="path-params">{' + $1 + '}</a>';
       })
     }

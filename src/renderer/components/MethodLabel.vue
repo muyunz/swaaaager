@@ -1,6 +1,6 @@
 <template>
-  <!-- <Tag class="method-label" :color="methods[method].color">{{ methods[method].text }}</Tag> -->
-  <div class="method-label" :style="{color: methods[method].color}">{{ methods[method].text }}</div>
+  <Tag class="method-label" :color="methods[method].color">{{ methods[method].text }}</Tag>
+  <!-- <div class="method-label" :style="{color: methods[method].color}">{{ methods[method].text }}</div> -->
 </template>
 
 <script>

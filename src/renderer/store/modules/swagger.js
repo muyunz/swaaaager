@@ -1,10 +1,12 @@
 import axios from 'axios'
+import _ from 'lodash'
 
 const UNKWON_TAG = 'UNKWON'
 
 const state = {
   url: null,
   paths: [],
+  definitions: [],
   tags: {
     [UNKWON_TAG]: {
       paths: []
@@ -34,15 +36,20 @@ const mutations = {
 
     const tags = {}
 
+    // GroupBy Tags
     Object.keys(resource.paths).forEach(path => {
       Object.keys(resource.paths[path]).forEach(method => {
         const pathMethod = resource.paths[path][method]
         pathMethod.tags && pathMethod.tags.length ? pathMethod.tags.forEach(tag => {
           const pathItem = {
             method,
-            path
+            path,
+            tag: tag,
+            index: 0
           }
           if (tags[tag]) {
+            const index = tags[tag].paths.length
+            pathItem.index = index
             tags[tag].paths.push(pathItem)
           } else {
             tags[tag] = { paths: [ pathItem ] }
@@ -56,6 +63,7 @@ const mutations = {
 
     state.resource = resource
     state.tags = tags
+    state.definitions = resource.definitions
     state.fetcing = false
     state.fetched = true
   },
@@ -73,9 +81,22 @@ const actions = {
   }
 }
 
+const getters = {
+  getRef: state => ref => {
+    if (ref.startsWith('#/')) {
+      const path = ref.substring(2).replace('/', '.')
+      return _.get(state.resource, path)
+    }
+    return null
+  },
+  tagNames: state => Object.keys(state.tags),
+  allPaths: state => _.flatten(Object.keys(state.tags).map(t => state.tags[t].paths))
+}
+
 export default {
   namespaced: true,
   state,
   mutations,
-  actions
+  actions,
+  getters
 }

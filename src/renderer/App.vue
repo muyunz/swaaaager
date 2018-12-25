@@ -33,13 +33,14 @@ export default {
       display: flex;
       .main-sidebar {
         width: 300px;
+        height: 100vh;
       }
       .main-content {
         flex: 1;
         display: flex;
         overflow-y: auto;
         overflow-x: hidden;
-        background: #fffcf9;
+        background: #fff;
       }
     }
   }
