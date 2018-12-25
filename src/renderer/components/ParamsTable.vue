@@ -4,20 +4,19 @@
       <div
         @click="expandSchema(param, paramIndex)"
         :key="`param-${paramIndex}`"
-        :class="{'params-table__schema': param.schema}"
+        :class="{'params-table__schema': param.schema, 'params-table__param-required': param.required, 'params-table__param-has-expand': getCorrectRef(param)}"
         class="params-table__param">
-          <div v-if="param.required" class="params-table__param-required"></div>
           <div class="params-table__param-name">{{ param.name }}</div>
           <div class="params-table__param-description">{{ param.description }}</div>
           <div class="params-table__param-type">{{ param.type }}</div>
       </div>
       <div
         class="params-table__expand"
-        v-if="param.schema && expands.includes(paramIndex)"
+        v-if="getCorrectRef(param) && expands.includes(paramIndex)"
         :key="`schema-${paramIndex}`">
         <div class="params-table__expand-line"></div>
-        <div class="params-table__expand-content" v-if="getRef(param.schema.$ref)">
-          <params-table :params="transformProperties(getRef(param.schema.$ref).properties)"></params-table>
+        <div class="params-table__expand-content" v-if="getRef(getCorrectRef(param))">
+          <params-table :params="transformProperties(getRef(getCorrectRef(param)).properties)"></params-table>
         </div>
       </div>
     </template>
@@ -26,7 +25,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { generateExampleCodeByParam, transformProperties } from '@/libs/swagger'
+import { generateExampleCodeByParam, transformProperties, getCorrectRef } from '@/libs/swagger'
 
 export default {
   name: 'params-table',
@@ -36,6 +35,7 @@ export default {
   },
   data () {
     return {
+      getCorrectRef,
       generateExampleCodeByParam,
       transformProperties,
 
@@ -72,33 +72,14 @@ export default {
       display: flex;
       width: 100%;
       .params-table__param {
-        &:before {
-          position: absolute;
-          top: 50%;
-          left: -8px;
-          content: '';
-          display: block;
-          width: 5px;
-          height: 1px;
-          background: #ccc;
-        }
       }
       .params-table__expand-line {
         position: relative;
-        width: 30px;
-        &:after {
-          position: absolute;
-          left: 20px;
-          content: '';
-          display: block;
-          width: 1px;
-          height: calc(100% - 19px);
-          background: #ccc;
-        }
+        width: 10px;
       }
       .params-table__expand-content {
         width: 100%;
-
+        box-shadow: -1px 0px 3px 0px rgba(0, 0, 0, 0.1);
       }
     }
     & > .params-table__param {
@@ -112,12 +93,18 @@ export default {
       &.params-table__schema {
         cursor: pointer;
       }
-      .params-table__param-required {
-        position: absolute;
-        left: 0;
-        width: 2px;
-        height: 100%;
-        background: #F7567C;
+      &.params-table__param-required {
+        .params-table__param-name {
+          color: #EA2117;
+        }
+      }
+      &.params-table__param-has-expand {
+        .params-table__param-type {
+          color: #247ba0;
+          &:after {
+            content: '(+)'
+          }
+        }
       }
       .params-table__param-name {
         font-weight: bold;

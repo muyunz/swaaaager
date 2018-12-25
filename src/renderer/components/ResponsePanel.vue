@@ -12,16 +12,16 @@
         <Panel class="response-panel__introduction" name="introduction" hide-arrow>
           {{ currentResponse.description }}
         </Panel>
-        <Panel name="response">
+        <Panel name="response" v-if="getCorrectRef(currentResponse)">
           範例
           <p slot="content">
-            <response-example-panel v-if="currentResponse.$ref" :reference="currentResponse.$ref"></response-example-panel>
+            <response-example-panel :reference="getCorrectRef(currentResponse)"></response-example-panel>
           </p>
         </Panel>
         <Panel name="schema">
           屬性
           <p slot="content">
-            <response-schema-panel v-if="currentResponse.$ref" :reference="currentResponse.$ref"></response-schema-panel>
+            <response-schema-panel :reference="getCorrectRef(currentResponse)"></response-schema-panel>
           </p>
         </Panel>
       </Collapse>
@@ -31,6 +31,7 @@
 
 <script>
 import _ from 'lodash'
+import { getCorrectRef } from '@/libs/swagger'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -42,6 +43,8 @@ export default {
   },
   data () {
     return {
+      getCorrectRef,
+
       currentStatusCode: '200'
     }
   },

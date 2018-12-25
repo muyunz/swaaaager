@@ -6,6 +6,10 @@ body {
   padding: 15px 0;
 }
 
+.flex-spacer {
+  flex: 1;
+}
+
 .CodeMirror {
   font-family: monospace,monospace;
   font-size: 13px;

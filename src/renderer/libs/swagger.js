@@ -11,3 +11,7 @@ export const transformProperties = (properties) => {
     name: p
   }))
 }
+
+export const getCorrectRef = (entity) => {
+  return entity.$ref || (entity.schema && entity.schema.$ref)
+}
