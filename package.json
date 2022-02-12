@@ -73,7 +73,7 @@
   },
   "devDependencies": {
     "@mdi/font": "^3.2.89",
-    "ajv": "^6.5.0",
+    "ajv": "^6.12.3",
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.3",
     "babel-helper-vue-jsx-merge-props": "^2.0.3",
